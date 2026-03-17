@@ -2,7 +2,7 @@
 // Intro → (if accepted) Drawer with Tabs inside
 
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerNavigationProp } from '@react-navigation/drawer';
@@ -58,6 +58,15 @@ const Stack           = createStackNavigator<RootStackParams>();
 const ExistenciaStack = createStackNavigator<ExistenciaStackParams>();
 const Drawer          = createDrawerNavigator<DrawerParams>();
 const Tab             = createBottomTabNavigator<InfusionTabParams>();
+
+function AppHeaderTitle() {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+      <InfusorIcon width={22} height={22} color="#007AFF" />
+      <Text style={{ fontSize: 17, fontWeight: '600', color: '#111' }}>InfusorApp</Text>
+    </View>
+  );
+}
 
 function DrawerMenuButton() {
   const navigation = useNavigation<DrawerNavigationProp<DrawerParams>>();
@@ -123,7 +132,10 @@ function AppDrawer() {
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
-      screenOptions={{ headerLeft: () => <DrawerMenuButton /> }}
+      screenOptions={{
+        headerLeft: () => <DrawerMenuButton />,
+        headerTitle: () => <AppHeaderTitle />,
+      }}
     >
       <Drawer.Screen name="Infusion"     component={InfusionTabs}      options={{ title: 'Infusión' }} />
       <Drawer.Screen name="Existencias"  component={ExistenciasStack}  options={{ title: 'Existencias', headerShown: false }} />

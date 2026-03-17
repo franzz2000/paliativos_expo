@@ -11,7 +11,6 @@ import {
   type DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
-import InfusorIcon from '../../assets/infusor.svg';
 
 import { NuevaInfusionModal } from '../components/NuevaInfusionModal';
 import { useInfusionStore } from '../store/infusionStore';
@@ -33,8 +32,7 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
       <DrawerContentScrollView {...props} contentContainerStyle={styles.container}>
         {/* Drawer header */}
         <View style={styles.drawerHeader}>
-          <InfusorIcon width={24} height={24} color={colors.primary} />
-          <Text style={styles.drawerTitle}>InfusorApp</Text>
+          <Text style={styles.drawerTitle}>Menú</Text>
         </View>
 
         {/* "Infusión nueva" — first item, opens confirmation modal */}
