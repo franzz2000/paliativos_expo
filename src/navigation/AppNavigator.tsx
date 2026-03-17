@@ -27,6 +27,7 @@ import { ExistenciaScreen }     from '../screens/ExistenciaScreen';
 import { ConfiguracionScreen }  from '../screens/ConfiguracionScreen';
 import { AyudaScreen }          from '../screens/AyudaScreen';
 import { AcercaDeScreen }       from '../screens/AcercaDeScreen';
+import { InfusoresTiposScreen } from '../screens/InfusoresTiposScreen';
 
 // ── Type declarations ──────────────────────────────────────────────────────────
 export type RootStackParams = {
@@ -37,6 +38,7 @@ export type RootStackParams = {
 export type DrawerParams = {
   Infusion: undefined;
   Existencias: undefined;
+  InfusoresTipos: undefined;
   Configuracion: undefined;
   Ayuda: undefined;
   AcercaDe: undefined;
@@ -138,7 +140,8 @@ function AppDrawer() {
       }}
     >
       <Drawer.Screen name="Infusion"     component={InfusionTabs}      options={{ title: 'Infusión' }} />
-      <Drawer.Screen name="Existencias"  component={ExistenciasStack}  options={{ title: 'Existencias', headerShown: false }} />
+      <Drawer.Screen name="Existencias"    component={ExistenciasStack}    options={{ title: 'Existencias', headerShown: false }} />
+      <Drawer.Screen name="InfusoresTipos" component={InfusoresTiposScreen} options={{ title: 'Infusores' }} />
       <Drawer.Screen name="Configuracion" component={ConfiguracionScreen} options={{ title: 'Configuración' }} />
       <Drawer.Screen name="Ayuda"        component={AyudaScreen}       options={{ title: 'Ayuda' }} />
       <Drawer.Screen name="AcercaDe"     component={AcercaDeScreen}    options={{ title: 'Acerca de' }} />

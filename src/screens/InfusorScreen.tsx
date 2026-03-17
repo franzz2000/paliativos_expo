@@ -1,17 +1,22 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
+  FlatList,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useInfusionStore } from '../store/infusionStore';
 import { useConfiguracionStore } from '../store/configuracionStore';
+import { useInfusoresTiposStore } from '../store/infusoresTiposStore';
 import { calcularInfusor } from '../services/infusorCalcs';
+import type { InfusorTipo } from '../types';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -61,18 +66,85 @@ function LabeledInput({ label, placeholder, value, onChange }: LabeledInputProps
   );
 }
 
+// ─── Infusor picker overlay ────────────────────────────────────────────────────
+
+const PERSONALIZACION_ID = '__custom__';
+
+interface PickerOverlayProps {
+  infusores: InfusorTipo[];
+  selectedId: string | null;
+  onSelect: (id: string | null) => void;
+  onClose: () => void;
+}
+
+function InfusorPickerOverlay({ infusores, selectedId, onSelect, onClose }: PickerOverlayProps) {
+  type PickerItem = { id: string; label: string; meta?: string };
+
+  const items: PickerItem[] = [
+    { id: PERSONALIZACION_ID, label: 'Personalizar' },
+    ...infusores.map((inf) => ({
+      id: inf.id,
+      label: inf.descripcion,
+      meta: `${inf.volumen} ml · ${inf.flujo} ml/h`,
+    })),
+  ];
+
+  return (
+    <View style={styles.pickerOverlay}>
+      <Pressable style={styles.pickerBackdrop} onPress={onClose} />
+      <View style={styles.pickerSheet}>
+        <Text style={styles.pickerTitle}>Seleccionar infusor</Text>
+        <FlatList
+          data={items}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <View style={styles.pickerSeparator} />}
+          renderItem={({ item }) => {
+            const isSelected = item.id === (selectedId ?? PERSONALIZACION_ID);
+            return (
+              <TouchableOpacity
+                style={styles.pickerItem}
+                onPress={() => onSelect(item.id === PERSONALIZACION_ID ? null : item.id)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.pickerItemText}>
+                  <Text style={[styles.pickerItemLabel, isSelected && styles.pickerItemLabelActive]}>
+                    {item.label}
+                  </Text>
+                  {item.meta ? (
+                    <Text style={styles.pickerItemMeta}>{item.meta}</Text>
+                  ) : null}
+                </View>
+                {isSelected && (
+                  <Ionicons name="checkmark" size={18} color="#007AFF" />
+                )}
+              </TouchableOpacity>
+            );
+          }}
+        />
+      </View>
+    </View>
+  );
+}
+
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export function InfusorScreen() {
-  const infusion = useInfusionStore((s) => s.infusion);
-  const setVolumen = useInfusionStore((s) => s.setVolumen);
-  const setFlujo = useInfusionStore((s) => s.setFlujo);
-  const setCorreccion = useInfusionStore((s) => s.setCorreccion);
-  const setDuracionDias = useInfusionStore((s) => s.setDuracionDias);
+  const infusion       = useInfusionStore((s) => s.infusion);
+  const setVolumen     = useInfusionStore((s) => s.setVolumen);
+  const setFlujo       = useInfusionStore((s) => s.setFlujo);
+  const setCorreccion  = useInfusionStore((s) => s.setCorreccion);
+  const setDuracionDias  = useInfusionStore((s) => s.setDuracionDias);
   const setDuracionHoras = useInfusionStore((s) => s.setDuracionHoras);
 
-  const muestraAyudas = useConfiguracionStore((s) => s.muestraAyudas);
+  const muestraAyudas    = useConfiguracionStore((s) => s.muestraAyudas);
   const porcentajeMinimo = useConfiguracionStore((s) => s.porcentajeMinimo);
+
+  const infusores = useInfusoresTiposStore((s) => s.infusores);
+
+  const selectedInfusorId        = useInfusionStore((s) => s.selectedInfusorTipoId);
+  const setSelectedInfusorTipoId = useInfusionStore((s) => s.setSelectedInfusorTipoId);
+
+  const [pickerVisible, setPickerVisible] = useState(false);
 
   const derived = useMemo(
     () =>
@@ -104,6 +176,33 @@ export function InfusorScreen() {
 
   const showHelp = muestraAyudas && !infusion.recalculada;
 
+  const selectedLabel = useMemo(() => {
+    if (selectedInfusorId === null) return 'Personalizar';
+    return infusores.find((inf) => inf.id === selectedInfusorId)?.descripcion ?? 'Personalizar';
+  }, [selectedInfusorId, infusores]);
+
+  const handleSelectInfusor = (id: string | null) => {
+    setSelectedInfusorTipoId(id);
+    setPickerVisible(false);
+    if (id !== null) {
+      const inf = infusores.find((i) => i.id === id);
+      if (inf) {
+        setVolumen(inf.volumen);
+        setFlujo(inf.flujo);
+      }
+    }
+  };
+
+  const handleVolumenChange = (v: number | null) => {
+    setSelectedInfusorTipoId(null);
+    setVolumen(v);
+  };
+
+  const handleFlujoChange = (v: number | null) => {
+    setSelectedInfusorTipoId(null);
+    setFlujo(v);
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.flex}
@@ -126,6 +225,19 @@ export function InfusorScreen() {
           </View>
         )}
 
+        {/* ── Selector de infusor ───────────────────────────────────────── */}
+        <View style={styles.section}>
+          <Text style={styles.sectionHeader}>Tipo de infusor</Text>
+          <TouchableOpacity
+            style={styles.pickerRow}
+            onPress={() => setPickerVisible(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.pickerRowText}>{selectedLabel}</Text>
+            <Ionicons name="chevron-down" size={18} color="#999" />
+          </TouchableOpacity>
+        </View>
+
         {/* ── Características del infusor ───────────────────────────────── */}
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>Características del infusor</Text>
@@ -134,14 +246,14 @@ export function InfusorScreen() {
             label="Volumen (ml)"
             placeholder="Volumen del infusor en ml"
             value={infusion.volumen}
-            onChange={setVolumen}
+            onChange={handleVolumenChange}
           />
           <View style={styles.divider} />
           <LabeledInput
             label="Flujo (ml/h)"
             placeholder="Flujo del infusor en ml/h"
             value={infusion.flujo}
-            onChange={setFlujo}
+            onChange={handleFlujoChange}
           />
         </View>
 
@@ -157,7 +269,6 @@ export function InfusorScreen() {
 
         {/* ── Duración deseada ──────────────────────────────────────────── */}
         <View style={styles.section}>
-          {/* Header with min/max info */}
           <View style={styles.duracionHeader}>
             <Text style={styles.sectionHeader}>Duración deseada</Text>
 
@@ -196,6 +307,16 @@ export function InfusorScreen() {
           />
         </View>
       </ScrollView>
+
+      {/* ── Infusor picker overlay ────────────────────────────────────────── */}
+      {pickerVisible && (
+        <InfusorPickerOverlay
+          infusores={infusores}
+          selectedId={selectedInfusorId}
+          onSelect={handleSelectInfusor}
+          onClose={() => setPickerVisible(false)}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -216,6 +337,7 @@ const colors = {
   helpBorder: '#4a90d9',
   helpText: '#2c6fad',
   divider: '#eeeeee',
+  primary: '#007AFF',
 };
 
 const styles = StyleSheet.create({
@@ -228,7 +350,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 
-  // Help card
   helpCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -239,9 +360,7 @@ const styles = StyleSheet.create({
     padding: 12,
     gap: 8,
   },
-  helpIcon: {
-    marginTop: 1,
-  },
+  helpIcon: { marginTop: 1 },
   helpText: {
     flex: 1,
     fontSize: 14,
@@ -249,7 +368,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 
-  // Section card
   section: {
     backgroundColor: colors.card,
     borderRadius: 8,
@@ -274,7 +392,21 @@ const styles = StyleSheet.create({
     marginLeft: 14,
   },
 
-  // Duration header (contains min/max lines)
+  // Picker trigger row
+  pickerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    gap: 8,
+  },
+  pickerRowText: {
+    flex: 1,
+    fontSize: 16,
+    color: colors.inputText,
+  },
+
+  // Duration header
   duracionHeader: {
     backgroundColor: colors.headerBg,
     paddingHorizontal: 14,
@@ -312,4 +444,44 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
+
+  // Picker overlay
+  pickerOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'flex-end',
+  },
+  pickerBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+  },
+  pickerSheet: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 14,
+    borderTopRightRadius: 14,
+    paddingBottom: Platform.OS === 'ios' ? 28 : 16,
+    maxHeight: '60%',
+  },
+  pickerTitle: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#999',
+    textAlign: 'center',
+    paddingVertical: 14,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  pickerItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    gap: 10,
+  },
+  pickerItemText: { flex: 1 },
+  pickerItemLabel: { fontSize: 16, color: '#111' },
+  pickerItemLabelActive: { color: colors.primary, fontWeight: '600' },
+  pickerItemMeta: { fontSize: 13, color: '#888', marginTop: 2 },
+  pickerSeparator: { height: 1, backgroundColor: '#f0f0f0', marginLeft: 20 },
 });

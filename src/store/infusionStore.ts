@@ -19,11 +19,13 @@ const DEFAULT_INFUSION: Infusion = {
 
 interface InfusionStore {
   infusion: Infusion;
+  selectedInfusorTipoId: string | null;
   setVolumen: (v: number | null) => void;
   setFlujo: (v: number | null) => void;
   setCorreccion: (v: number | null) => void;
   setDuracionDias: (v: number | null) => void;
   setDuracionHoras: (v: number | null) => void;
+  setSelectedInfusorTipoId: (id: string | null) => void;
   addMedicamento: (m: MedicamentoInfusion) => void;
   updateMedicamento: (atc: string, cantidadDiaria: number) => void;
   removeMedicamento: (atc: string) => void;
@@ -35,6 +37,7 @@ export const useInfusionStore = create<InfusionStore>()(
   persist(
     (set) => ({
       infusion: DEFAULT_INFUSION,
+      selectedInfusorTipoId: null,
 
       setVolumen: (v) =>
         set((s) => ({ infusion: { ...s.infusion, volumen: v } })),
@@ -50,6 +53,8 @@ export const useInfusionStore = create<InfusionStore>()(
 
       setDuracionHoras: (v) =>
         set((s) => ({ infusion: { ...s.infusion, duracionHoras: v } })),
+
+      setSelectedInfusorTipoId: (id) => set({ selectedInfusorTipoId: id }),
 
       addMedicamento: (m) =>
         set((s) => ({
@@ -79,7 +84,7 @@ export const useInfusionStore = create<InfusionStore>()(
 
       setInfusion: (infusion) => set({ infusion }),
 
-      clear: () => set({ infusion: { ...DEFAULT_INFUSION, medicamentos: [] } }),
+      clear: () => set({ infusion: { ...DEFAULT_INFUSION, medicamentos: [] }, selectedInfusorTipoId: null }),
     }),
     {
       name: 'infusion',

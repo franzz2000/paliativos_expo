@@ -57,14 +57,16 @@ type Props = StackScreenProps<ExistenciaStackParams, 'ExistenciasList'>;
 export function ExistenciasScreen({ navigation }: Props) {
   const getAllPa            = useDatosStore((s) => s.getAllPa);
   const getAllPresentaciones = useDatosStore((s) => s.getAllPresentaciones);
+  const stockOverrides      = useDatosStore((s) => s.stockOverrides);
 
   const [search, setSearch] = useState('');
   const listRef = useRef<FlatList<ListItem>>(null);
 
-  // Build full flat list once; re-build when store changes
+  // Re-build when stock changes (stockOverrides triggers the memo)
   const fullList = useMemo(
     () => buildList(getAllPa(), getAllPresentaciones()),
-    [getAllPa, getAllPresentaciones],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [stockOverrides],
   );
 
   // Filter by PA name (clave), preserving both title rows and their children

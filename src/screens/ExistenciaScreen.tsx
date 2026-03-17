@@ -5,8 +5,10 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import type { StackScreenProps } from '@react-navigation/stack';
 
@@ -34,7 +36,20 @@ export function ExistenciaScreen({ route, navigation }: Props) {
 
   // Set navigation header title to the PA name (replicates view-title={{datos.titulo}})
   useLayoutEffect(() => {
-    navigation.setOptions({ title: pa.descripcion });
+    navigation.setOptions({
+      title: pa.descripcion,
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backBtn}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
+          <View style={styles.backCircle}>
+            <Ionicons name="chevron-back" size={18} color="#007AFF" />
+          </View>
+        </TouchableOpacity>
+      ),
+    });
   }, [navigation, pa.descripcion]);
 
   // Save stock when leaving the screen (replicates $ionicView.leave)
@@ -102,6 +117,16 @@ const colors = {
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
+
+  backBtn: { paddingHorizontal: 12 },
+  backCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#e8e8e8',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
   content: { padding: 16, gap: 14 },
 

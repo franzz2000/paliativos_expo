@@ -78,6 +78,15 @@ export interface InfusorDerivedValues {
   volumenMinimo: number | null;
 }
 
+// ─── Infusor Tipo ─────────────────────────────────────────────────────────────
+
+export interface InfusorTipo {
+  id: string;
+  descripcion: string;
+  volumen: number;
+  flujo: number;
+}
+
 // ─── Config & Error Types ─────────────────────────────────────────────────────
 
 export interface Configuracion {
