@@ -85,6 +85,7 @@ export interface Configuracion {
   recalcula: boolean;
   muestraAyudas: boolean;
   muestraIntro: boolean;
+  disclaimerAceptado: boolean;
 }
 
 export interface ErrorCalculo {

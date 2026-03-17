@@ -12,6 +12,7 @@ const DEFAULT_CONFIG: Configuracion = {
   recalcula: false,
   muestraAyudas: true,
   muestraIntro: true,
+  disclaimerAceptado: false,
 };
 
 interface ConfiguracionStore extends Configuracion {
@@ -19,6 +20,7 @@ interface ConfiguracionStore extends Configuracion {
   setRecalcula: (value: boolean) => void;
   setMuestraAyudas: (value: boolean) => void;
   setMuestraIntro: (value: boolean) => void;
+  setDisclaimerAceptado: (value: boolean) => void;
   reset: () => void;
 }
 
@@ -31,6 +33,7 @@ export const useConfiguracionStore = create<ConfiguracionStore>()(
       setRecalcula: (value) => set({ recalcula: value }),
       setMuestraAyudas: (value) => set({ muestraAyudas: value }),
       setMuestraIntro: (value) => set({ muestraIntro: value }),
+      setDisclaimerAceptado: (value) => set({ disclaimerAceptado: value }),
       reset: () => set(DEFAULT_CONFIG),
     }),
     {
