@@ -10,6 +10,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useConfiguracionStore } from '../store/configuracionStore';
 
+import InfusorIcon    from '../../assets/infusor.svg';
+import MedkitIcon     from '../../assets/medkit.svg';
+import CalculatorIcon from '../../assets/calculator.svg';
+
 // ── Custom drawer ─────────────────────────────────────────────────────────────
 import { CustomDrawerContent } from './CustomDrawerContent';
 
@@ -86,9 +90,30 @@ function ExistenciasStack() {
 function InfusionTabs() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Infusor"      component={InfusorScreen}      options={{ title: 'Infusor' }} />
-      <Tab.Screen name="Medicamentos" component={MedicamentosScreen} options={{ title: 'Medicamentos' }} />
-      <Tab.Screen name="Calculo"      component={CalculoScreen}      options={{ title: 'Cálculo' }} />
+      <Tab.Screen
+        name="Infusor"
+        component={InfusorScreen}
+        options={{
+          title: 'Infusor',
+          tabBarIcon: ({ color, size }) => <InfusorIcon width={size} height={size} color={color} />,
+        }}
+      />
+      <Tab.Screen
+        name="Medicamentos"
+        component={MedicamentosScreen}
+        options={{
+          title: 'Medicamentos',
+          tabBarIcon: ({ color, size }) => <MedkitIcon width={size} height={size} fill={color} />,
+        }}
+      />
+      <Tab.Screen
+        name="Calculo"
+        component={CalculoScreen}
+        options={{
+          title: 'Cálculo',
+          tabBarIcon: ({ color, size }) => <CalculatorIcon width={size} height={size} fill={color} />,
+        }}
+      />
     </Tab.Navigator>
   );
 }
