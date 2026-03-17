@@ -96,7 +96,10 @@ function InfusionTabs() {
 /** Replaces menu.html side-menu + all app.* states */
 function AppDrawer() {
   return (
-    <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{ headerLeft: () => <DrawerMenuButton /> }}
+    >
       <Drawer.Screen name="Infusion"     component={InfusionTabs}      options={{ title: 'Infusión' }} />
       <Drawer.Screen name="Existencias"  component={ExistenciasStack}  options={{ title: 'Existencias', headerShown: false }} />
       <Drawer.Screen name="Configuracion" component={ConfiguracionScreen} options={{ title: 'Configuración' }} />
