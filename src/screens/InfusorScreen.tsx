@@ -190,6 +190,9 @@ export function InfusorScreen() {
         setVolumen(inf.volumen);
         setFlujo(inf.flujo);
       }
+    } else {
+      setVolumen(null);
+      setFlujo(null);
     }
   };
 

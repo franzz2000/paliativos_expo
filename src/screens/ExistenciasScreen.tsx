@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import type { StackScreenProps } from '@react-navigation/stack';
 
 import { useDatosStore } from '../store/datosStore';
+import { useConfiguracionStore } from '../store/configuracionStore';
 import type { ExistenciaStackParams } from '../navigation/AppNavigator';
 import type { Presentacion, PrincipioActivo } from '../types';
 
@@ -55,6 +56,7 @@ function StockBadge({ enStock }: { enStock: number }) {
 type Props = StackScreenProps<ExistenciaStackParams, 'ExistenciasList'>;
 
 export function ExistenciasScreen({ navigation }: Props) {
+  const muestraAyudas = useConfiguracionStore((s) => s.muestraAyudas);
   const getAllPa            = useDatosStore((s) => s.getAllPa);
   const getAllPresentaciones = useDatosStore((s) => s.getAllPresentaciones);
   const stockOverrides      = useDatosStore((s) => s.stockOverrides);
@@ -108,6 +110,17 @@ export function ExistenciasScreen({ navigation }: Props) {
 
   return (
     <View style={styles.flex}>
+      {/* ── Help card ──────────────────────────────────────────────────────── */}
+      {muestraAyudas && (
+        <View style={styles.helpCard}>
+          <Ionicons name="information-circle-outline" size={20} color="#4a90d9" style={styles.helpIcon} />
+          <Text style={styles.helpText}>
+            Indica la cantidad de unidades disponibles de cada medicamento en tu botiquín.
+            Estos datos se utilizarán para calcular si dispones de suficiente medicación.
+          </Text>
+        </View>
+      )}
+
       {/* ── Search bar (replicates ion-header-bar sub-header) ──────────────── */}
       <View style={styles.searchBar}>
         <Ionicons name="search" size={16} color="#999" style={styles.searchIcon} />
@@ -166,6 +179,27 @@ const colors = {
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
+
+  // Help card
+  helpCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: '#eaf3fb',
+    borderLeftWidth: 3,
+    borderLeftColor: '#4a90d9',
+    borderRadius: 6,
+    margin: 12,
+    marginBottom: 0,
+    padding: 12,
+    gap: 8,
+  },
+  helpIcon: { marginTop: 1 },
+  helpText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#2c6fad',
+    lineHeight: 20,
+  },
 
   // Search bar
   searchBar: {

@@ -139,8 +139,8 @@ function AppDrawer() {
         headerTitle: () => <AppHeaderTitle />,
       }}
     >
-      <Drawer.Screen name="Infusion"     component={InfusionTabs}      options={{ title: 'Infusión' }} />
-      <Drawer.Screen name="Existencias"    component={ExistenciasStack}    options={{ title: 'Existencias', headerShown: false }} />
+      <Drawer.Screen name="Infusion"     component={InfusionTabs}      options={{ title: 'Infusión actual' }} />
+      <Drawer.Screen name="Existencias"    component={ExistenciasStack}    options={{ title: 'Almacén medicamentos', headerShown: false }} />
       <Drawer.Screen name="InfusoresTipos" component={InfusoresTiposScreen} options={{ title: 'Infusores' }} />
       <Drawer.Screen name="Configuracion" component={ConfiguracionScreen} options={{ title: 'Configuración' }} />
       <Drawer.Screen name="Ayuda"        component={AyudaScreen}       options={{ title: 'Ayuda' }} />

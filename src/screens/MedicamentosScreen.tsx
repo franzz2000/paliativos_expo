@@ -404,7 +404,8 @@ export function MedicamentosScreen() {
         <View style={styles.helpCard}>
           <Ionicons name="information-circle-outline" size={20} color="#4a90d9" style={styles.helpIcon} />
           <Text style={styles.helpText}>
-            Deslice el medicamento hacia la izquierda para borrarlo.
+            Añada los medicamentos y dosis diarias a administrar en el infusor.{'\n\n'}
+            Deslice un medicamento hacia la izquierda para borrarlo.
           </Text>
         </View>
       )}

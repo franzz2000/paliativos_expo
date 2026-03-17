@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {
   DrawerContentScrollView,
-  DrawerItemList,
+  DrawerItem,
   type DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
@@ -47,10 +47,27 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
           <Text style={styles.newInfusionText}>Infusión nueva</Text>
         </TouchableOpacity>
 
-        <View style={styles.divider} />
+        {/* Registered drawer screens — divider after the first item */}
+        {props.state.routes.map((route, index) => {
+          const { title, drawerLabel, drawerIcon, drawerActiveTintColor, drawerInactiveTintColor } =
+            props.descriptors[route.key].options;
+          const focused = props.state.index === index;
+          const label = (drawerLabel ?? title ?? route.name) as string;
 
-        {/* Registered drawer screens (Infusión actual, Existencias, etc.) */}
-        <DrawerItemList {...props} />
+          return (
+            <Fragment key={route.key}>
+              <DrawerItem
+                label={label}
+                focused={focused}
+                icon={drawerIcon ? ({ color, size }) => drawerIcon({ color, size, focused }) : undefined}
+                activeTintColor={drawerActiveTintColor}
+                inactiveTintColor={drawerInactiveTintColor}
+                onPress={() => props.navigation.navigate(route.name)}
+              />
+              {(index === 0 || index === 2) && <View style={styles.divider} />}
+            </Fragment>
+          );
+        })}
       </DrawerContentScrollView>
 
       <NuevaInfusionModal

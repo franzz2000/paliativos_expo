@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import { useInfusoresTiposStore } from '../store/infusoresTiposStore';
+import { useConfiguracionStore } from '../store/configuracionStore';
 import { InfusorTipoFormModal } from '../components/InfusorTipoFormModal';
 import type { InfusorTipo } from '../types';
 
@@ -72,6 +73,7 @@ function InfusorRow({ item, onEdit, onDelete }: RowProps) {
 
 export function InfusoresTiposScreen() {
   const navigation = useNavigation();
+  const muestraAyudas = useConfiguracionStore((s) => s.muestraAyudas);
   const infusores = useInfusoresTiposStore((s) => s.infusores);
   const add       = useInfusoresTiposStore((s) => s.add);
   const update    = useInfusoresTiposStore((s) => s.update);
@@ -124,6 +126,16 @@ export function InfusoresTiposScreen() {
 
   return (
     <View style={styles.flex}>
+      {muestraAyudas && (
+        <View style={styles.helpCard}>
+          <Ionicons name="information-circle-outline" size={20} color="#4a90d9" style={styles.helpIcon} />
+          <Text style={styles.helpText}>
+            Guarda aquí los modelos de infusor disponibles en tu centro de trabajo.
+            Podrás seleccionarlos rápidamente al configurar una infusión.
+          </Text>
+        </View>
+      )}
+
       <FlatList
         data={infusores}
         keyExtractor={(item) => item.id}
@@ -156,6 +168,26 @@ export function InfusoresTiposScreen() {
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: '#f0f0f0' },
   list: { flex: 1 },
+
+  helpCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: '#eaf3fb',
+    borderLeftWidth: 3,
+    borderLeftColor: '#4a90d9',
+    borderRadius: 6,
+    margin: 12,
+    marginBottom: 0,
+    padding: 12,
+    gap: 8,
+  },
+  helpIcon: { marginTop: 1 },
+  helpText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#2c6fad',
+    lineHeight: 20,
+  },
 
   row: {
     flexDirection: 'row',

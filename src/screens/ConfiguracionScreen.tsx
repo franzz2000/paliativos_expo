@@ -73,12 +73,12 @@ export function ConfiguracionScreen() {
         </View>
       </View>
 
-      {/* ── Mostrar visita guiada ─────────────────────────────────────────── */}
+      {/* ── Mostrar intro ─────────────────────────────────────────── */}
       <TouchableOpacity
         style={styles.btn}
         onPress={() => setMuestraIntro(true)}
       >
-        <Text style={styles.btnText}>Mostrar visita guiada</Text>
+        <Text style={styles.btnText}>Mostrar intro</Text>
       </TouchableOpacity>
 
     </ScrollView>
