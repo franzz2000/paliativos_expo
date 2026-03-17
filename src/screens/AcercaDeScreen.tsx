@@ -54,8 +54,18 @@ export function AcercaDeScreen() {
 
         <Section title="Términos de uso">
           <Paragraph>
-            Cualquier uso fuera de los términos anteriormente descritos se considerará fuera
-            del ámbito de uso de la aplicación.
+            La aplicación InfusorApp está destinada exclusivamente a profesionales sanitarios
+            cualificados para su uso como herramienta de apoyo al cálculo de medicación en
+            infusores elastoméricos en el ámbito de los cuidados paliativos.
+          </Paragraph>
+          <Paragraph>
+            Su finalidad es servir de ayuda en el cálculo de dosis, nunca como sustituto del
+            criterio clínico del profesional ni de los protocolos establecidos por su institución
+            sanitaria.
+          </Paragraph>
+          <Paragraph>
+            Queda expresamente prohibido su uso fuera del ámbito descrito, así como cualquier
+            utilización por personas sin la titulación o habilitación profesional correspondiente.
           </Paragraph>
         </Section>
 
@@ -63,10 +73,10 @@ export function AcercaDeScreen() {
 
         <Section title="Descargo de responsabilidades">
           {[
-            'A pesar de que se ha intentado evitar al máximo errores de cálculo en la aplicación, ésta puede tener fallos, por lo que no se garantiza que la misma esté exenta de errores que puedan aparecer.',
-            'Esta aplicación está pensada para los fines que se describen en los términos de uso. Cualquier uso de la misma para otros fines se considerará un uso incorrecto.',
-            'La aplicación Infusor y su autor no asumen ninguna responsabilidad sobre los daños que pueda causar por su uso incorrecto o por la aparición de errores en los cálculos.',
-            'Es responsabilidad exclusiva del profesional sanitario que la utilice el comprobar que los resultados calculados en la aplicación son los correctos.',
+            'A pesar de haberse realizado las verificaciones necesarias para garantizar la exactitud de los cálculos, la aplicación puede contener errores o inexactitudes. El autor no garantiza que el software esté libre de fallos en todo momento ni en todas las circunstancias de uso.',
+            'La aplicación InfusorApp está concebida exclusivamente para los fines descritos en los términos de uso. Todo uso ajeno a dicha finalidad se considerará un uso inadecuado y quedará fuera del ámbito de responsabilidad del autor.',
+            'El autor de la aplicación no asume responsabilidad alguna por los daños directos, indirectos o consecuentes que pudieran derivarse de un uso incorrecto de la aplicación, de errores en los cálculos o de decisiones clínicas adoptadas basándose en sus resultados.',
+            'Es responsabilidad exclusiva del profesional sanitario que utilice esta herramienta verificar la corrección de todos los resultados obtenidos antes de aplicarlos en la práctica clínica, conforme a su juicio profesional y a los protocolos vigentes en su centro de trabajo.',
           ].map((item, i) => (
             <View key={i} style={styles.listItem}>
               <Text style={styles.listBullet}>{i + 1}.</Text>
