@@ -2,7 +2,6 @@ import React, { useCallback, useRef, useState } from 'react';
 import {
   Dimensions,
   FlatList,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,6 +9,7 @@ import {
   View,
   ViewToken,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useConfiguracionStore } from '../store/configuracionStore';
 
@@ -123,6 +123,7 @@ function Dots({ current }: { current: number }) {
 // ─── Main screen ──────────────────────────────────────────────────────────────
 
 export function IntroScreen() {
+  const insets = useSafeAreaInsets();
   const setMuestraIntro = useConfiguracionStore((s) => s.setMuestraIntro);
 
   const [slideIndex, setSlideIndex]               = useState(0);
@@ -176,10 +177,16 @@ export function IntroScreen() {
     ) : null;
 
   const rightBtn =
-    slideIndex === 2 ? (
+    slideIndex === 3 ? (
       <TouchableOpacity onPress={startApp} style={styles.navBtn}>
         <Text style={styles.navBtnText}>Iniciar aplicación</Text>
       </TouchableOpacity>
+    ) : slideIndex === 2 ? (
+      aceptaCondiciones ? (
+        <TouchableOpacity onPress={() => goTo(slideIndex + 1)} style={styles.navBtn}>
+          <Text style={styles.navBtnText}>Siguiente ›</Text>
+        </TouchableOpacity>
+      ) : null
     ) : (
       <TouchableOpacity onPress={() => goTo(slideIndex + 1)} style={styles.navBtn}>
         <Text style={styles.navBtnText}>Siguiente ›</Text>
@@ -189,7 +196,7 @@ export function IntroScreen() {
   return (
     <View style={styles.flex}>
       {/* Nav bar */}
-      <View style={styles.navBar}>
+      <View style={[styles.navBar, { paddingTop: insets.top }]}>
         <View style={styles.navSide}>{leftBtn}</View>
         <Text style={styles.navTitle}>Intro</Text>
         <View style={[styles.navSide, styles.navRight]}>{rightBtn}</View>
@@ -244,8 +251,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.navBg,
     borderBottomWidth: 1,
     borderBottomColor: colors.navBorder,
-    paddingTop: Platform.OS === 'ios' ? 0 : 0,
-    height: 48,
+    minHeight: 48,
     paddingHorizontal: 4,
   },
   navSide: { flex: 1 },

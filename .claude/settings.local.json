@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm info:*)",
+      "Bash(npx expo-doctor@latest --fix-all 2>/dev/null | head -5; npx create-expo-app --info 2>/dev/null | head -10; npm info expo-doctor version 2>/dev/null | tail -1)",
+      "Bash(npx expo:*)",
+      "Bash(npm pack:*)",
+      "WebSearch",
+      "Bash(cat node_modules/react-native-worklets/package.json | python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('peerDependencies',{}\\), indent=2\\)\\)\")",
+      "Bash(cat node_modules/react-native-worklets/package.json | python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\('main',''\\)\\)\")",
+      "Bash(node -e \"require\\('./node_modules/react-native-reanimated/plugin/index.js'\\); console.log\\('OK'\\)\" 2>&1)"
+    ]
+  }
+}

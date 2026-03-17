@@ -70,33 +70,33 @@ interface PaPickerModalProps {
   onClose: () => void;
 }
 
-function PaPickerModal({ visible, items, onSelect, onClose }: PaPickerModalProps) {
+function PaPickerOverlay({ visible, items, onSelect, onClose }: PaPickerModalProps) {
+  if (!visible) return null;
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={styles.pickerOverlay}>
-        <View style={styles.pickerSheet}>
-          <View style={styles.pickerHeader}>
-            <Text style={styles.pickerTitle}>Seleccione principio activo</Text>
-            <TouchableOpacity onPress={onClose}>
-              <Ionicons name="close" size={22} color="#555" />
-            </TouchableOpacity>
-          </View>
-          <FlatList
-            data={items}
-            keyExtractor={(item) => item.atc}
-            ItemSeparatorComponent={() => <View style={styles.pickerSeparator} />}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.pickerItem}
-                onPress={() => { onSelect(item); onClose(); }}
-              >
-                <Text style={styles.pickerItemText}>{item.descripcion}</Text>
-              </TouchableOpacity>
-            )}
-          />
+    <View style={styles.pickerOverlay}>
+      <Pressable style={styles.pickerBackdrop} onPress={onClose} />
+      <View style={styles.pickerSheet}>
+        <View style={styles.pickerHeader}>
+          <Text style={styles.pickerTitle}>Seleccione principio activo</Text>
+          <TouchableOpacity onPress={onClose}>
+            <Ionicons name="close" size={22} color="#555" />
+          </TouchableOpacity>
         </View>
+        <FlatList
+          data={items}
+          keyExtractor={(item) => item.atc}
+          ItemSeparatorComponent={() => <View style={styles.pickerSeparator} />}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.pickerItem}
+              onPress={() => { onSelect(item); onClose(); }}
+            >
+              <Text style={styles.pickerItemText}>{item.descripcion}</Text>
+            </TouchableOpacity>
+          )}
+        />
       </View>
-    </Modal>
+    </View>
   );
 }
 
@@ -319,16 +319,16 @@ function MedicamentoModal({ visible, mode, editAtc, onClose }: MedicamentoModalP
               </View>
             )}
           </ScrollView>
+
+          {/* PA picker — overlay inside the same modal to avoid nested-modal issues on iOS */}
+          <PaPickerOverlay
+            visible={paPickerVisible}
+            items={availablePa}
+            onSelect={(pa) => { setSelectedPa(pa); setCantidad(''); }}
+            onClose={() => setPaPickerVisible(false)}
+          />
         </KeyboardAvoidingView>
       </Modal>
-
-      {/* PA picker sheet (secondary modal) */}
-      <PaPickerModal
-        visible={paPickerVisible}
-        items={availablePa}
-        onSelect={(pa) => { setSelectedPa(pa); setCantidad(''); }}
-        onClose={() => setPaPickerVisible(false)}
-      />
     </>
   );
 }
@@ -625,9 +625,13 @@ const styles = StyleSheet.create({
 
   // PA picker sheet
   pickerOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
+    zIndex: 100,
+  },
+  pickerBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
   pickerSheet: {
     backgroundColor: colors.card,

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useShallow } from 'zustand/react/shallow';
 
 import { useInfusionStore } from '../store/infusionStore';
 import { useDatosStore } from '../store/datosStore';
@@ -269,11 +270,11 @@ export function CalculoScreen() {
   const infusionStored    = useInfusionStore((s) => s.infusion);
   const getPa             = useDatosStore((s) => s.getPa);
   const getPresentacionesPa = useDatosStore((s) => s.getPresentacionesPa);
-  const configuracion     = useConfiguracionStore((s) => ({
+  const configuracion     = useConfiguracionStore(useShallow((s) => ({
     recalcula: s.recalcula,
     porcentajeMinimo: s.porcentajeMinimo,
     muestraAyudas: s.muestraAyudas,
-  }));
+  })));
 
   const [resultado, setResultado] = useState<Infusion>(infusionStored);
   const [errores, setErrores]     = useState<ErrorCalculo[]>([]);

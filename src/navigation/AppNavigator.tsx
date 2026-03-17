@@ -2,10 +2,12 @@
 // Intro → (if accepted) Drawer with Tabs inside
 
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerNavigationProp } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 import { useConfiguracionStore } from '../store/configuracionStore';
 
 // ── Custom drawer ─────────────────────────────────────────────────────────────
@@ -53,6 +55,15 @@ const ExistenciaStack = createStackNavigator<ExistenciaStackParams>();
 const Drawer          = createDrawerNavigator<DrawerParams>();
 const Tab             = createBottomTabNavigator<InfusionTabParams>();
 
+function DrawerMenuButton() {
+  const navigation = useNavigation<DrawerNavigationProp<DrawerParams>>();
+  return (
+    <TouchableOpacity onPress={() => navigation.openDrawer()} style={{ paddingHorizontal: 16 }}>
+      <Ionicons name="menu" size={24} color="#007AFF" />
+    </TouchableOpacity>
+  );
+}
+
 /** Replaces app.existencias + app.existencia/:id states */
 function ExistenciasStack() {
   return (
@@ -60,7 +71,7 @@ function ExistenciasStack() {
       <ExistenciaStack.Screen
         name="ExistenciasList"
         component={ExistenciasScreen}
-        options={{ title: 'Existencias' }}
+        options={{ title: 'Existencias', headerLeft: () => <DrawerMenuButton /> }}
       />
       <ExistenciaStack.Screen
         name="Existencia"
