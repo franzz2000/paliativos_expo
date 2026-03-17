@@ -157,6 +157,17 @@ Médico especialista en Medicina Familiar y Comunitaria
 - Web: [www.infusor-app.com](http://www.infusor-app.com)
 - Contacto: infusor@infusor-app.com
 
-## Licencia
+## ⚖️ Licencia y Atribución
+Este proyecto está bajo la licencia **GNU GPL v3**. 
 
-Uso reservado. Consulta los términos de uso en la pantalla *Acerca de* de la aplicación.
+**¿Quieres usar parte del código en tu proyecto?**
+¡Perfecto! Solo recuerda que, bajo esta licencia, debes:
+1. **Mencionar a InfusorApp** y a sus autores originales en los créditos.
+2. Hacer que tu aplicación también sea de **código abierto** bajo la misma licencia GPL v3.
+
+## ☕ Apoya el proyecto
+Si InfusorApp te resulta útil, puedes invitarme a un café para ayudarme a mantener los servidores y seguir mejorando la herramienta:
+👉 [Buy Me a Coffee](https://buymeacoffee.com/franzjimeno)
+
+---
+Hecho con ❤️ por Franz Jimeno 
