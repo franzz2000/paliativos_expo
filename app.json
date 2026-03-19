@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Paliativos",
+    "name": "Infusor App",
     "slug": "paliativos",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,17 +11,30 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "com.paliativos.app"
+      "supportsTablet": true,
+      "bundleIdentifier": "com.infusor-app.PaliativosIonic",
+      "buildNumber": "2",
+      "version": "2.0.0",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.paliativos.app"
+      "package": "com.infusorapp.app",
+      "versionCode": 2
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6ef3ea1f-5dc3-4643-9594-fe192e4f0219"
+      }
     }
   }
 }
