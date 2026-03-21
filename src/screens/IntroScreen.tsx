@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import {
   Dimensions,
   FlatList,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -78,11 +79,11 @@ function Slide4() {
       <Text style={styles.slideTitle}>Más información</Text>
       <Text style={styles.slideBody}>
         Puede consultar más información sobre la aplicación en{'\n'}
-        <Text style={styles.link}>www.infusor-app.com</Text>
+        <Text style={styles.link} onPress={() => Linking.openURL('https://www.infusor-app.com')}>www.infusor-app.com</Text>
       </Text>
       <Text style={styles.slideBody}>
         Si quiere contactar con el programador puede hacerlo en{'\n'}
-        <Text style={styles.link}>infusor@infusor-app.com</Text>
+        <Text style={styles.link} onPress={() => Linking.openURL('mailto:infusor@infusor-app.com')}>infusor@infusor-app.com</Text>
       </Text>
     </View>
   );
