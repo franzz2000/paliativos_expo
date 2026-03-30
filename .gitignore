@@ -1,2 +1,15 @@
 node_modules
 .expo/
+
+android
+ios
+build
+dist
+coverage
+*.log
+*.tmp
+*.env
+.DS_Store
+.vscode/
+.idea/
+
