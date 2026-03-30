@@ -15,6 +15,7 @@ import {
 import { Swipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useInfusionStore } from '../store/infusionStore';
 import { useDatosStore } from '../store/datosStore';
@@ -123,6 +124,7 @@ interface MedicamentoModalProps {
 }
 
 function MedicamentoModal({ visible, mode, editAtc, onClose }: MedicamentoModalProps) {
+  const insets = useSafeAreaInsets();
   const addMedicamento   = useInfusionStore((s) => s.addMedicamento);
   const updateMedicamento = useInfusionStore((s) => s.updateMedicamento);
   const medicamentos     = useInfusionStore((s) => s.infusion.medicamentos);
@@ -216,7 +218,7 @@ function MedicamentoModal({ visible, mode, editAtc, onClose }: MedicamentoModalP
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           {/* ── Modal header ─────────────────────────────────────────── */}
-          <View style={styles.modalHeader}>
+          <View style={[styles.modalHeader, { paddingTop: (Platform.OS === 'ios' ? 16 : 12) + insets.top }]}>
             <Text style={styles.modalTitle}>{title}</Text>
             <TouchableOpacity onPress={onClose} style={styles.modalCancelBtn}>
               <Text style={styles.modalCancelText}>Cancelar</Text>
